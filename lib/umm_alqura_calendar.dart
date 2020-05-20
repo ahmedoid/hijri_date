@@ -1,10 +1,13 @@
 library hijri;
 
+import 'package:flutter/material.dart';
+import 'package:hijri/DigitsConverter.dart';
+
 import 'umm_alqura_array.dart';
 
-class ummAlquraCalendar {
-  String currentLocale = 'en';
-  int  lengthOfMonth;
+class UmmAlquraCalendar {
+  static String language = 'en';
+  int lengthOfMonth;
   int hDay;
   int hMonth;
   int hYear;
@@ -28,17 +31,22 @@ class ummAlquraCalendar {
     },
   };
 
-  ummAlquraCalendar();
+  // Consider switching to the factory pattern
+  static void setLocal(Locale locale) {
+    if (locale != null) language = locale.languageCode;
+  }
 
-  ummAlquraCalendar.fromDate(DateTime date) {
+  UmmAlquraCalendar();
+
+  UmmAlquraCalendar.fromDate(DateTime date) {
     gregorianToHijri(date.year, date.month, date.day);
   }
 
-  ummAlquraCalendar.now() {
+  UmmAlquraCalendar.now() {
     this._now();
   }
 
-  ummAlquraCalendar.addMonth(int year, int month) {
+  UmmAlquraCalendar.addMonth(int year, int month) {
     hYear = month % 12 == 0 ? year - 1 : year;
     hMonth = month % 12 == 0 ? 12 : month % 12;
     hDay = 1;
@@ -173,22 +181,20 @@ class ummAlquraCalendar {
     var id = mcjdn - _ummalquraDataIndex(i - 1) + 1;
     var ml = _ummalquraDataIndex(i) - _ummalquraDataIndex(i - 1);
     lengthOfMonth = ml;
-    // int wd = this._gMod(cjdn + 1, 1);
     var wd = _gMod(cjdn + 1, 7);
 
     wkDay = wd == 0 ? 7 : wd;
-    // print("week day is $wd");
     return hDate(iy, im, id);
   }
 
   hDate(year, month, day) {
     this.hYear = year;
     this.hMonth = month;
-    this.longMonthName = _local[currentLocale]['long'][month];
-    this.dayWeName = _local[currentLocale]['days'][wkDay];
-    this.shortMonthName = _local[currentLocale]['short'][month];
+    this.longMonthName = _local[language]['long'][month];
+    this.dayWeName = _local[language]['days'][wkDay];
+    this.shortMonthName = _local[language]['short'][month];
     this.hDay = day;
-    format(this.hYear, this.hMonth, this.hDay, "dd/mm/yyyyH");
+    format(this.hYear, this.hMonth, this.hDay, "dd/mm/yyyy");
   }
 
   String toFormat(String format) {
@@ -199,39 +205,58 @@ class ummAlquraCalendar {
     //  if (validateHijri(year, month, day)) {
     String newFormat = format;
 
+    String dayString;
+    String monthString;
+    String yearString;
+
+    if (language == 'ar') {
+      dayString = DigitsConverter.convertWesternNumberToEastern(day);
+      monthString = DigitsConverter.convertWesternNumberToEastern(month);
+      yearString = DigitsConverter.convertWesternNumberToEastern(year);
+    } else {
+      dayString = day.toString();
+      monthString = month.toString();
+      yearString = year.toString();
+    }
+
     if (newFormat.indexOf("dd") != -1)
-      newFormat =
-          newFormat.replaceFirst("dd", day < 10 ? "0$day" : day.toString());
+      newFormat = newFormat.replaceFirst("dd", dayString);
     else if (newFormat.indexOf("d") != -1)
       newFormat = newFormat.replaceFirst("d", day.toString());
 
+    //=========== Day Name =============//
+    // Friday
     if (newFormat.indexOf("DDDD") != -1) {
       newFormat = newFormat.replaceFirst(
-          "DDDD", "${_local[currentLocale]['days'][wkDay ?? wekDay()]}");
+          "DDDD", "${_local[language]['days'][wkDay ?? wekDay()]}");
+
+      // Fri
     } else if (newFormat.indexOf("DD") != -1) {
       newFormat = newFormat.replaceFirst(
-          "DD", "${_local[currentLocale]['short_days'][wkDay ?? wekDay()]}");
+          "DD", "${_local[language]['short_days'][wkDay ?? wekDay()]}");
     }
 
+    //============== Month ========================//
+    // 1
     if (newFormat.indexOf("mm") != -1)
-      newFormat = newFormat.replaceFirst(
-          "mm", month < 10 ? "0$month" : month.toString());
+      newFormat = newFormat.replaceFirst("mm", monthString);
     else
-      newFormat = newFormat.replaceFirst("m", month.toString());
+      newFormat = newFormat.replaceFirst("m", monthString);
 
+    // Muharram
     if (newFormat.indexOf("MMMM") != -1)
       newFormat =
-          newFormat.replaceFirst("MMMM", _local[currentLocale]['long'][month]);
+          newFormat.replaceFirst("MMMM", _local[language]['long'][month]);
     else if (newFormat.indexOf("MM") != -1)
       newFormat =
-          newFormat.replaceFirst("MM", _local[currentLocale]['short'][month]);
+          newFormat.replaceFirst("MM", _local[language]['short'][month]);
 
+    //================= Year ========================//
     if (newFormat.indexOf("yyyy") != -1)
-      newFormat = newFormat.replaceFirst("yyyy", year.toString());
+      newFormat = newFormat.replaceFirst("yyyy", yearString);
     else
-      newFormat = newFormat.replaceFirst("yy", year.toString().substring(2, 4));
+      newFormat = newFormat.replaceFirst("yy", yearString.substring(2, 4));
     return newFormat;
-    // }
   }
 
   bool isBefore(int year, int month, int day) {
@@ -264,13 +289,16 @@ class ummAlquraCalendar {
 
   @override
   String toString() {
-    return format(hYear, hMonth, hDay, "dd/mm/yyyyH");
+    String dateFormat = "dd/mm/yyyy";
+    if (language == "ar") dateFormat = "yyyy/mm/dd";
+
+    return format(hYear, hMonth, hDay, dateFormat);
   }
 
   List<int> toList() => [hYear, hMonth, hDay];
 
   String fullDate() {
-    return format(hYear, hMonth, hDay, "DDDD, MMMM d, yyyy h");
+    return format(hYear, hMonth, hDay, "DDDD, MMMM dd, yyyy");
   }
 
   bool isValid() {

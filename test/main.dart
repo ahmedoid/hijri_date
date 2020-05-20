@@ -2,23 +2,23 @@
 // source code is governed by a BSD-style license that can be found in the
 // LICENSE file.
 
+import 'package:flutter_test/flutter_test.dart';
 import 'package:hijri/umm_alqura_calendar.dart';
-import 'package:test/test.dart';
 
 void main() {
-  ummAlquraCalendar _hijriDate = new ummAlquraCalendar();
+  UmmAlquraCalendar _hijriDate = new UmmAlquraCalendar();
   _hijriDate.hYear = 1439;
   _hijriDate.hMonth = 10;
   _hijriDate.hDay = 30;
- // _hijriDate.currentLocale = 'ar';
+  // _hijriDate.currentLocale = 'ar';
   group('Hijri', () {
     test('produces the correct date', () {
-      expect(new ummAlquraCalendar.fromDate(new DateTime(2018, 5, 27)).toList(),
+      expect(new UmmAlquraCalendar.fromDate(new DateTime(2018, 5, 27)).toList(),
           equals([1439, 9, 12]));
     });
     test('format date', () {
       expect(
-          new ummAlquraCalendar.fromDate(new DateTime(2018, 5, 27))
+          new UmmAlquraCalendar.fromDate(new DateTime(2018, 5, 27))
               .toFormat("dd mm yy"),
           equals("12 09 39"));
     });
@@ -61,7 +61,7 @@ void main() {
   group('Gregorian', () {
     test('convert Hijri to Gregorian', () {
       expect(_hijriDate.hijriToGregorian(1439, 10, 12),
-          equals( new DateTime(2018, 06, 26, 00, 00, 00, 000)));
+          equals(new DateTime(2018, 06, 26, 00, 00, 00, 000)));
     });
   });
 }

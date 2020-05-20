@@ -11,4 +11,5 @@ environment:
 
 
 dev_dependencies:
-  test: "^0.12.38+1"
+  flutter_test:
+    sdk: flutter
