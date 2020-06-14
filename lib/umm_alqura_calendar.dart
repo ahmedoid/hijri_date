@@ -1,7 +1,6 @@
 library hijri;
 
-import 'package:flutter/material.dart';
-import 'package:hijri/DigitsConverter.dart';
+import 'package:hijri/digits_converter.dart';
 
 import 'umm_alqura_array.dart';
 
@@ -27,13 +26,14 @@ class UmmAlquraCalendar {
       'long': arMonthNames,
       'short': arMonthShortNames,
       'days': arWkNames,
-      'short_days': shortWdNames
+      'short_days': arShortWdNames
     },
   };
 
   // Consider switching to the factory pattern
-  static void setLocal(Locale locale) {
-    if (locale != null) language = locale.languageCode;
+  factory  UmmAlquraCalendar.setLocal(String locale) {
+    if (locale != null) language = locale;
+    return UmmAlquraCalendar();
   }
 
   UmmAlquraCalendar();
@@ -195,6 +195,7 @@ class UmmAlquraCalendar {
     this.shortMonthName = _local[language]['short'][month];
     this.hDay = day;
     format(this.hYear, this.hMonth, this.hDay, "dd/mm/yyyy");
+    print(longMonthName);
   }
 
   String toFormat(String format) {
@@ -202,7 +203,6 @@ class UmmAlquraCalendar {
   }
 
   format(year, month, day, format) {
-    //  if (validateHijri(year, month, day)) {
     String newFormat = format;
 
     String dayString;

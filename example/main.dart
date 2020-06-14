@@ -1,9 +1,9 @@
-import 'dart:ui';
+
 
 import 'package:hijri/umm_alqura_calendar.dart';
 
 void main() {
-  Locale locale = const Locale('ar', 'SA');
+  String locale = 'ar';
 
   //Suppose current gregorian data/time is: Mon May 29 00:27:33  2018
   UmmAlquraCalendar _today = new UmmAlquraCalendar.now();

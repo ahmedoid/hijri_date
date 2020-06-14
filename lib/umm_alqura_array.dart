@@ -85,6 +85,17 @@ final Map<int, String> arWkNames = {
   6: "السبت"
 };
 
+
+final Map<int, String> arShortWdNames = {
+  7: "أحد",
+  1: "إثنين",
+  2: "ثلاثاء",
+  3: "أربعاء",
+  4: "خميس",
+  5: "جمعة",
+  6: "سبت"
+};
+
 final List<int> ummAlquraDateArray = [
   28607,
   28636,

@@ -1,15 +1,12 @@
 name: hijri
 description: >
   Convert between Hijri and  Gregorian calendar days.
-version: 0.2.5
-author: Ahmed Aljuaid <aljo3aid@gmail.com>
-email: aljo3aid@gmail.com
-homepage: http://www.ummulqura.org.sa/
+version: 1.0.1
+homepage: https://github.com/ahmedoid/hijri_date
 
 environment:
-  sdk: '>=2.0.0 <3.0.0'
+  sdk: '>=2.4.0 <3.0.0'
 
 
 dev_dependencies:
-  flutter_test:
-    sdk: flutter
+  test: "^1.14.3"
