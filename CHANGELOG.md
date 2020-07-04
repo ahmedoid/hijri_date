@@ -1,4 +1,13 @@
 # Changelog
+## 2.0.2
+
+- update README.md
+ 
+## 2.0.0
+
+- change ```ummAlquarCalendar``` to ```HijriCalendar```
+- fix issues
+
 ## 1.0.1
 
 - add days short name for Arabic

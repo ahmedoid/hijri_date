@@ -2,11 +2,11 @@
 // source code is governed by a BSD-style license that can be found in the
 // LICENSE file.
 
-import 'package:hijri/umm_alqura_calendar.dart';
+import 'package:hijri/hijri_calendar.dart';
 import 'package:test/test.dart';
 
 void main() {
-  UmmAlquraCalendar _hijriDate = new UmmAlquraCalendar();
+  HijriCalendar _hijriDate = new HijriCalendar();
   _hijriDate.hYear = 1439;
   _hijriDate.hMonth = 10;
   _hijriDate.hDay = 30;
@@ -14,12 +14,12 @@ void main() {
   // _hijriDate.currentLocale = 'ar';
   group('Hijri', () {
     test('produces the correct date', () {
-      expect(new UmmAlquraCalendar.fromDate(new DateTime(2020, 5, 20)).toList(),
+      expect(new HijriCalendar.fromDate(new DateTime(2020, 5, 20)).toList(),
           equals([1441, 9, 27]));
     });
     test('format date', () {
       expect(
-          new UmmAlquraCalendar.fromDate(new DateTime(2018, 5, 27))
+          new HijriCalendar.fromDate(new DateTime(2018, 5, 27))
               .toFormat("dd mm yy"),
           equals("12 9 39"));
     });

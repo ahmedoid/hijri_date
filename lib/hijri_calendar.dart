@@ -2,9 +2,9 @@ library hijri;
 
 import 'package:hijri/digits_converter.dart';
 
-import 'umm_alqura_array.dart';
+import 'hijri_array.dart';
 
-class UmmAlquraCalendar {
+class HijriCalendar {
   static String language = 'en';
   int lengthOfMonth;
   int hDay;
@@ -31,29 +31,29 @@ class UmmAlquraCalendar {
   };
 
   // Consider switching to the factory pattern
-  factory  UmmAlquraCalendar.setLocal(String locale) {
+  factory HijriCalendar.setLocal(String locale) {
     if (locale != null) language = locale;
-    return UmmAlquraCalendar();
+    return HijriCalendar();
   }
 
-  UmmAlquraCalendar();
+  HijriCalendar();
 
-  UmmAlquraCalendar.fromDate(DateTime date) {
+  HijriCalendar.fromDate(DateTime date) {
     gregorianToHijri(date.year, date.month, date.day);
   }
 
-  UmmAlquraCalendar.now() {
+  HijriCalendar.now() {
     this._now();
   }
 
-  UmmAlquraCalendar.addMonth(int year, int month) {
+  HijriCalendar.addMonth(int year, int month) {
     hYear = month % 12 == 0 ? year - 1 : year;
     hMonth = month % 12 == 0 ? 12 : month % 12;
     hDay = 1;
   }
 
   _now() {
-    var today = new DateTime.now();
+    var today = DateTime.now();
     gregorianToHijri(today.year, today.month, today.day);
   }
 
@@ -103,14 +103,13 @@ class UmmAlquraCalendar {
     var d = (365.25 * c).floor();
     var e = ((b - d) / 30.6001).floor();
     var day = b - d - (e * 30.6001).floor();
-    var wd = _gMod(julianDate + 1, 7) + 1;
-    // print("Week day - $wd");
+    //var wd = _gMod(julianDate + 1, 7) + 1;
     var month = e - (e > 13.5 ? 13 : 1);
     var year = c - (month > 2.5 ? 4716 : 4715);
     if (year <= 0) {
       year--;
     } // No year zero
-    return new DateTime(year, (month), day);
+    return DateTime(year, (month), day);
   }
 
   gregorianToHijri(pYear, pMonth, pDay) {
@@ -195,7 +194,6 @@ class UmmAlquraCalendar {
     this.shortMonthName = _local[language]['short'][month];
     this.hDay = day;
     format(this.hYear, this.hMonth, this.hDay, "dd/mm/yyyy");
-    print(longMonthName);
   }
 
   String toFormat(String format) {
@@ -219,43 +217,51 @@ class UmmAlquraCalendar {
       yearString = year.toString();
     }
 
-    if (newFormat.indexOf("dd") != -1)
+    if (newFormat.contains("dd")) {
       newFormat = newFormat.replaceFirst("dd", dayString);
-    else if (newFormat.indexOf("d") != -1)
-      newFormat = newFormat.replaceFirst("d", day.toString());
+    } else {
+      if (newFormat.contains("d")) {
+        newFormat = newFormat.replaceFirst("d", day.toString());
+      }
+    }
 
     //=========== Day Name =============//
     // Friday
-    if (newFormat.indexOf("DDDD") != -1) {
+    if (newFormat.contains("DDDD")) {
       newFormat = newFormat.replaceFirst(
           "DDDD", "${_local[language]['days'][wkDay ?? wekDay()]}");
 
       // Fri
-    } else if (newFormat.indexOf("DD") != -1) {
+    } else if (newFormat.contains("DD")) {
       newFormat = newFormat.replaceFirst(
           "DD", "${_local[language]['short_days'][wkDay ?? wekDay()]}");
     }
 
     //============== Month ========================//
     // 1
-    if (newFormat.indexOf("mm") != -1)
+    if (newFormat.contains("mm")) {
       newFormat = newFormat.replaceFirst("mm", monthString);
-    else
+    } else {
       newFormat = newFormat.replaceFirst("m", monthString);
+    }
 
     // Muharram
-    if (newFormat.indexOf("MMMM") != -1)
+    if (newFormat.contains("MMMM")) {
       newFormat =
           newFormat.replaceFirst("MMMM", _local[language]['long'][month]);
-    else if (newFormat.indexOf("MM") != -1)
-      newFormat =
+    } else {
+      if (newFormat.contains("MM")) {
+        newFormat =
           newFormat.replaceFirst("MM", _local[language]['short'][month]);
+      }
+    }
 
     //================= Year ========================//
-    if (newFormat.indexOf("yyyy") != -1)
+    if (newFormat.contains("yyyy")) {
       newFormat = newFormat.replaceFirst("yyyy", yearString);
-    else
+    } else {
       newFormat = newFormat.replaceFirst("yy", yearString.substring(2, 4));
+    }
     return newFormat;
   }
 
@@ -276,7 +282,7 @@ class UmmAlquraCalendar {
 
   int _ummalquraDataIndex(int index) {
     if (index < 0 || index >= ummAlquraDateArray.length) {
-      throw new ArgumentError(
+      throw  ArgumentError(
           "Valid date should be between 1356 AH (14 March 1937 CE) to 1500 AH (16 November 2077 CE)");
     }
     return ummAlquraDateArray[index];

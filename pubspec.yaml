@@ -1,7 +1,7 @@
 name: hijri
 description: >
-  Convert between Hijri and  Gregorian calendar days.
-version: 1.0.1
+  Convert between Hijri Calendar and Gregorian Calendar date.
+version: 2.0.2
 homepage: https://github.com/ahmedoid/hijri_date
 
 environment:

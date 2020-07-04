@@ -12,6 +12,7 @@ final Map<int, String> monthNames = {
   11: 'Dhu al-Qi\'dah',
   12: 'Dhu al-Hijjah'
 };
+
 final Map<int, String> monthShortNames = {
   1: 'Muh',
   2: 'Saf',
@@ -26,6 +27,7 @@ final Map<int, String> monthShortNames = {
   11: 'DhuQ',
   12: 'DhuH'
 };
+
 final Map<int, String> arMonthNames = {
   1: 'محرم',
   2: 'صفر',
@@ -40,6 +42,7 @@ final Map<int, String> arMonthNames = {
   11: 'ذو القعدة',
   12: 'ذو الحجة'
 };
+
 final Map<int, String> arMonthShortNames = {
   1: 'محرم',
   2: 'صفر',
@@ -84,7 +87,6 @@ final Map<int, String> arWkNames = {
   5: "الجمعة",
   6: "السبت"
 };
-
 
 final Map<int, String> arShortWdNames = {
   7: "أحد",
