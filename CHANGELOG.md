@@ -1,4 +1,8 @@
 # Changelog
+## 2.0.3
+
+- add new method to return month name and day of week name
+
 ## 2.0.2
 
 - update README.md

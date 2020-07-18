@@ -14,7 +14,7 @@ Hijri Calendar Converter
   print(_today.hYear); // 1439
   print(_today.hMonth); // 9
   print(_today.hDay); // 14
-  print(_today.hDay); // 14
+  print(_today.getDayName()); // 14
   // Get month length in days
   print(_today.lengthOfMonth); // 30 days
   print(_today.toFormat("MMMM dd yyyy")); //Ramadan 14 1439
@@ -27,8 +27,8 @@ Hijri Calendar Converter
   ```dart
   var h_date = new HijriCalendar.fromDate(new DateTime(2018, 11, 12));
   print(h_date.toString()); //04/03/1440H
-  print(h_date.shortMonthName); //Rab1
-  print(h_date.longMonthName); //Rabi' al-awwal
+  print(h_date.getShortMonthName()); //Rab1
+  print(h_date.getLongMonthName()); //Rabi' al-awwal
   print(h_date.lengthOfMonth); // 29 days
 ```
 ##### Check if date is valid

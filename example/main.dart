@@ -8,11 +8,10 @@ void main() {
   //Suppose current gregorian data/time is: Mon May 29 00:27:33  2018
   HijriCalendar _today = new HijriCalendar.now();
   HijriCalendar.setLocal(locale);
-  print(_today.hYear); // 1439
-  print(_today.hMonth); // 9
-  print(_today.hDay); // 14
-  print(_today.hDay); // 14
-  print(_today.dayWeName);
+  print(_today.hYear); // 1441
+  print(_today.hMonth); // 11
+  print(_today.hDay); // 28
+  print(_today.getDayName());
   // Get month length in days
   print(_today.lengthOfMonth); // 30 days
   print(_today.toFormat("MMMM dd yyyy")); //Ramadan 14 1439
@@ -23,8 +22,8 @@ void main() {
   var hDate = new HijriCalendar.fromDate(new DateTime(2018, 11, 12));
 
   print(hDate.fullDate()); //04/03/1440H
-  print(hDate.shortMonthName); //Rab1
-  print(hDate.longMonthName); //Rabi' al-awwal
+  print(hDate.getShortMonthName()); //Rab1
+  print(hDate.getLongMonthName()); //Rabi' al-awwal
   print(hDate.lengthOfMonth); // 29 days
 
   // check date is valid

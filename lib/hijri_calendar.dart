@@ -325,4 +325,15 @@ class HijriCalendar {
     if (day < 1 || day > 30) return false;
     return true;
   }
+
+  String getLongMonthName() {
+    return _local[language]['long'][hMonth];
+  }
+  String getShortMonthName() {
+    return _local[language]['short'][hMonth];
+  }
+  String getDayName() {
+    return _local[language]['days'][wkDay];
+  }
+
 }
