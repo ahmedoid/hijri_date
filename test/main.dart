@@ -65,4 +65,18 @@ void main() {
           equals(new DateTime(2018, 06, 26, 00, 00, 00, 000)));
     });
   });
+
+  group('adjustment', () {
+    HijriCalendar _adjCal = new HijriCalendar();
+    test('without adjustment produces the correct date', () {
+      _adjCal.gregorianToHijri(2020, 8, 20);
+      expect(_adjCal.toList(), equals([1442, 1, 1]));
+    });
+    test('with adjustment produced the correct date', () {
+      //year 1441, month 12 ((1441 - 1) * 12 + 12) has 30 days instead of 29
+      _adjCal.setAdjustments({ 17292: 59083 });
+      _adjCal.gregorianToHijri(2020, 8, 20);
+      expect(_adjCal.toList(), equals([1441, 12, 30]));
+    });
+  });
 }

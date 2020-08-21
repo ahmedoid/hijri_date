@@ -51,4 +51,14 @@ void main() {
   print(_today.isAfter(1440, 11, 12)); // false
   print(_today.isBefore(1440, 11, 12)); // true
   print(_today.isAtSameMomentAs(1440, 11, 12)); // false
+
+  //Adjustment
+  var defCal = new HijriCalendar.fromDate(new DateTime(2020, 8, 20));
+  print("default ${defCal.fullDate()}");
+  var adjCal = new HijriCalendar();
+  var adj = new Map<int, int>();
+  adj[17292] = 59083; // 30 days instead of 29
+  adjCal.setAdjustments(adj);
+  adjCal.gregorianToHijri(2020, 8, 20);
+  print("adjusted ${adjCal.fullDate()}");
 }
