@@ -14,6 +14,7 @@ class HijriCalendar {
   String longMonthName;
   String shortMonthName;
   String dayWeName;
+  Map<int, int> adjustments;
 
   static Map<String, Map> _local = {
     'en': {
@@ -280,11 +281,20 @@ class HijriCalendar {
         hijriToGregorian(year, month, day).millisecondsSinceEpoch;
   }
 
+  setAdjustments(Map<int, int> adj) {
+    adjustments = adj;
+  }
+
   int _ummalquraDataIndex(int index) {
     if (index < 0 || index >= ummAlquraDateArray.length) {
       throw  ArgumentError(
           "Valid date should be between 1356 AH (14 March 1937 CE) to 1500 AH (16 November 2077 CE)");
     }
+
+    if (adjustments != null && adjustments.containsKey(index + 16260)) {
+      return adjustments[index + 16260];
+    }
+
     return ummAlquraDateArray[index];
   }
 
