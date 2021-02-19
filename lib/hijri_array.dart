@@ -1,16 +1,16 @@
 final Map<int, String> monthNames = {
   1: 'Muharram',
   2: 'Safar',
-  3: 'Rabi\' Al-Awwal',
-  4: 'Rabi\' Al-Thani',
-  5: 'Jumada Al-Awwal',
-  6: 'Jumada Al-Thani',
-  7: 'Rajab',
+  3: 'RabiulAwwal',
+  4: 'RabiulAkhir',
+  5: 'JamadilAwwal',
+  6: 'JamadilAkhir',
+  7: 'Rejab',
   8: 'Sha\'aban',
   9: 'Ramadan',
-  10: 'Shawwal',
-  11: 'Dhu Al-Qi\'dah',
-  12: 'Dhu Al-Hijjah'
+  10: 'Shawal',
+  11: 'Zulkaedah',
+  12: 'Zulhijjah'
 };
 
 final Map<int, String> monthShortNames = {
