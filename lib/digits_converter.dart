@@ -12,7 +12,7 @@ class DigitsConverter {
     '٩'
   ];
 
-  static String convertWesternNumberToEastern(int easternNumber) {
+  static String convertWesternNumberToEastern(int? easternNumber) {
     String englishNumber = easternNumber.toString();
     StringBuffer stringBuffer = StringBuffer();
     englishNumber.runes.forEach((rune) {

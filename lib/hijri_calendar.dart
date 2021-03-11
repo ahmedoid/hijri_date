@@ -6,17 +6,17 @@ import 'hijri_array.dart';
 
 class HijriCalendar {
   static String language = 'en';
-  int lengthOfMonth;
-  int hDay;
-  int hMonth;
-  int hYear;
-  int wkDay;
-  String longMonthName;
-  String shortMonthName;
-  String dayWeName;
-  Map<int, int> adjustments;
+  late int lengthOfMonth;
+  int hDay = 1;
+  late int hMonth;
+  late int hYear;
+  int? wkDay;
+  late String longMonthName;
+  late String shortMonthName;
+  late String dayWeName;
+  Map<int, int>? adjustments;
 
-  static const Map<String, Map> _local = {
+  static const Map<String, Map<String, Map<int, String>>> _local = {
     'en': {
       'long': monthNames,
       'short': monthShortNames,
@@ -33,7 +33,7 @@ class HijriCalendar {
 
   // Consider switching to the factory pattern
   factory HijriCalendar.setLocal(String locale) {
-    if (locale != null) language = locale;
+    language = locale;
     return HijriCalendar();
   }
 
@@ -60,7 +60,7 @@ class HijriCalendar {
 
   int getDaysInMonth(int year, int month) {
     int i = _getNewMoonMJDNIndex(year, month);
-    return _ummalquraDataIndex(i) - _ummalquraDataIndex(i - 1);
+    return _ummalquraDataIndex(i)! - _ummalquraDataIndex(i - 1)!;
   }
 
   int _gMod(int n, int m) {
@@ -73,11 +73,11 @@ class HijriCalendar {
     return totalMonths - 16260;
   }
 
-  int lengthOfYear({int year = 0}) {
+  int lengthOfYear({int? year = 0}) {
     int total = 0;
     if (year == 0) year = this.hYear;
     for (int m = 0; m <= 11; m++) {
-      total += getDaysInMonth(year, m);
+      total += getDaysInMonth(year!, m);
     }
     return total;
   }
@@ -89,7 +89,7 @@ class HijriCalendar {
     int ii = iy - 1;
     int iln = (ii * 12) + 1 + (im - 1);
     int i = iln - 16260;
-    int mcjdn = id + _ummalquraDataIndex(i - 1) - 1;
+    int mcjdn = id + _ummalquraDataIndex(i - 1)! - 1;
     int cjdn = mcjdn + 2400000;
     return julianToGregorian(cjdn);
   }
@@ -169,7 +169,7 @@ class HijriCalendar {
     // the MCJDN's of the start of the lunations in the Umm al-Qura calendar are stored in 'islamcalendar_dat.js'
     int i;
     for (i = 0; i < ummAlquraDateArray.length; i++) {
-      if (_ummalquraDataIndex(i) > mcjdn) break;
+      if (_ummalquraDataIndex(i)! > mcjdn) break;
     }
 
     // compute and output the Umm al-Qura calendar date
@@ -178,8 +178,8 @@ class HijriCalendar {
     int ii = ((iln - 1) / 12).floor();
     int iy = ii + 1;
     int im = iln - 12 * ii;
-    int id = mcjdn - _ummalquraDataIndex(i - 1) + 1;
-    int ml = _ummalquraDataIndex(i) - _ummalquraDataIndex(i - 1);
+    int id = mcjdn - _ummalquraDataIndex(i - 1)! + 1;
+    int ml = _ummalquraDataIndex(i)! - _ummalquraDataIndex(i - 1)!;
     lengthOfMonth = ml;
     int wd = _gMod(cjdn + 1, 7);
 
@@ -190,9 +190,9 @@ class HijriCalendar {
   String hDate(int year, int month, int day) {
     this.hYear = year;
     this.hMonth = month;
-    this.longMonthName = _local[language]['long'][month];
-    this.dayWeName = _local[language]['days'][wkDay];
-    this.shortMonthName = _local[language]['short'][month];
+    this.longMonthName = _local[language]!['long']![month]!;
+    this.dayWeName = _local[language]!['days']![wkDay]!;
+    this.shortMonthName = _local[language]!['short']![month]!;
     this.hDay = day;
     return format(this.hYear, this.hMonth, this.hDay, "dd/mm/yyyy");
   }
@@ -230,12 +230,12 @@ class HijriCalendar {
     // Friday
     if (newFormat.contains("DDDD")) {
       newFormat = newFormat.replaceFirst(
-          "DDDD", "${_local[language]['days'][wkDay ?? wekDay()]}");
+          "DDDD", "${_local[language]!['days']![wkDay ?? weekDay()]}");
 
       // Fri
     } else if (newFormat.contains("DD")) {
       newFormat = newFormat.replaceFirst(
-          "DD", "${_local[language]['short_days'][wkDay ?? wekDay()]}");
+          "DD", "${_local[language]!['short_days']![wkDay ?? weekDay()]}");
     }
 
     //============== Month ========================//
@@ -249,11 +249,11 @@ class HijriCalendar {
     // Muharram
     if (newFormat.contains("MMMM")) {
       newFormat =
-          newFormat.replaceFirst("MMMM", _local[language]['long'][month]);
+          newFormat.replaceFirst("MMMM", _local[language]!['long']![month]!);
     } else {
       if (newFormat.contains("MM")) {
         newFormat =
-            newFormat.replaceFirst("MM", _local[language]['short'][month]);
+            newFormat.replaceFirst("MM", _local[language]!['short']![month]!);
       }
     }
 
@@ -285,20 +285,20 @@ class HijriCalendar {
     adjustments = adj;
   }
 
-  int _ummalquraDataIndex(int index) {
+  int? _ummalquraDataIndex(int index) {
     if (index < 0 || index >= ummAlquraDateArray.length) {
       throw ArgumentError(
           "Valid date should be between 1356 AH (14 March 1937 CE) to 1500 AH (16 November 2077 CE)");
     }
 
-    if (adjustments != null && adjustments.containsKey(index + 16260)) {
-      return adjustments[index + 16260];
+    if (adjustments != null && adjustments!.containsKey(index + 16260)) {
+      return adjustments![index + 16260];
     }
 
     return ummAlquraDateArray[index];
   }
 
-  int wekDay() {
+  int weekDay() {
     DateTime wkDay = hijriToGregorian(hYear, hMonth, hDay);
     return wkDay.weekday;
   }
@@ -311,7 +311,7 @@ class HijriCalendar {
     return format(hYear, hMonth, hDay, dateFormat);
   }
 
-  List<int> toList() => [hYear, hMonth, hDay];
+  List<int?> toList() => [hYear, hMonth, hDay];
 
   String fullDate() {
     return format(hYear, hMonth, hDay, "DDDD, MMMM dd, yyyy");
@@ -329,22 +329,22 @@ class HijriCalendar {
     }
   }
 
-  bool validateHijri(int year, int month, int day) {
+  bool validateHijri(int? year, int month, int? day) {
     if (month < 1 || month > 12) return false;
 
-    if (day < 1 || day > 30) return false;
+    if (day! < 1 || day > 30) return false;
     return true;
   }
 
-  String getLongMonthName() {
-    return _local[language]['long'][hMonth];
+  String? getLongMonthName() {
+    return _local[language]!['long']![hMonth];
   }
 
-  String getShortMonthName() {
-    return _local[language]['short'][hMonth];
+  String? getShortMonthName() {
+    return _local[language]!['short']![hMonth];
   }
 
-  String getDayName() {
-    return _local[language]['days'][wkDay];
+  String? getDayName() {
+    return _local[language]!['days']![wkDay];
   }
 }
