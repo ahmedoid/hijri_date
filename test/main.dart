@@ -6,7 +6,7 @@ import 'package:hijri/hijri_calendar.dart';
 import 'package:test/test.dart';
 
 void main() {
-  HijriCalendar _hijriDate = new HijriCalendar();
+  HijriCalendar _hijriDate = HijriCalendar();
   _hijriDate.hYear = 1439;
   _hijriDate.hMonth = 10;
   _hijriDate.hDay = 30;
@@ -14,13 +14,11 @@ void main() {
   // _hijriDate.currentLocale = 'ar';
   group('Hijri', () {
     test('produces the correct date', () {
-      expect(new HijriCalendar.fromDate(new DateTime(2020, 5, 20)).toList(),
+      expect(HijriCalendar.fromDate(DateTime(2020, 5, 20)).toList(),
           equals([1441, 9, 27]));
     });
     test('format date', () {
-      expect(
-          new HijriCalendar.fromDate(new DateTime(2018, 5, 27))
-              .toFormat("dd mm yy"),
+      expect(HijriCalendar.fromDate(DateTime(2018, 5, 27)).toFormat("dd mm yy"),
           equals("12 9 39"));
     });
     test('is valid date', () {
@@ -62,19 +60,19 @@ void main() {
   group('Gregorian', () {
     test('convert Hijri to Gregorian', () {
       expect(_hijriDate.hijriToGregorian(1439, 10, 12),
-          equals(new DateTime(2018, 06, 26, 00, 00, 00, 000)));
+          equals(DateTime(2018, 06, 26, 00, 00, 00, 000)));
     });
   });
 
   group('adjustment', () {
-    HijriCalendar _adjCal = new HijriCalendar();
+    HijriCalendar _adjCal = HijriCalendar();
     test('without adjustment produces the correct date', () {
       _adjCal.gregorianToHijri(2020, 8, 20);
       expect(_adjCal.toList(), equals([1442, 1, 1]));
     });
     test('with adjustment produced the correct date', () {
       //year 1441, month 12 ((1441 - 1) * 12 + 12) has 30 days instead of 29
-      _adjCal.setAdjustments({ 17292: 59083 });
+      _adjCal.setAdjustments({17292: 59083});
       _adjCal.gregorianToHijri(2020, 8, 20);
       expect(_adjCal.toList(), equals([1441, 12, 30]));
     });

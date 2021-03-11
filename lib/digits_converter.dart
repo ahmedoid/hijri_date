@@ -1,5 +1,5 @@
 class DigitsConverter {
-  static final List<String> easternArabicNumerals = [
+  static const List<String> easternArabicNumerals = [
     '٠',
     '١',
     '٢',
@@ -12,11 +12,11 @@ class DigitsConverter {
     '٩'
   ];
 
-  static String convertWesternNumberToEastern(int easternNumber) {
+  static String convertWesternNumberToEastern(int? easternNumber) {
     String englishNumber = easternNumber.toString();
     StringBuffer stringBuffer = StringBuffer();
     englishNumber.runes.forEach((rune) {
-      var character = String.fromCharCode(rune);
+      String character = String.fromCharCode(rune);
       stringBuffer.write(easternArabicNumerals[int.parse(character)]);
     });
     return stringBuffer.toString();

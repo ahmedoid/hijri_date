@@ -1,12 +1,10 @@
-
-
 import 'package:hijri/hijri_calendar.dart';
 
 void main() {
   String locale = 'ar';
 
   //Suppose current gregorian data/time is: Mon May 29 00:27:33  2018
-  HijriCalendar _today = new HijriCalendar.now();
+  HijriCalendar _today = HijriCalendar.now();
   HijriCalendar.setLocal(locale);
   print(_today.hYear); // 1441
   print(_today.hMonth); // 11
@@ -16,10 +14,10 @@ void main() {
   print(_today.lengthOfMonth); // 30 days
   print(_today.toFormat("MMMM dd yyyy")); //Ramadan 14 1439
   print(
-      " 10 months from now ${new HijriCalendar.addMonth(1440, 12).fullDate()}"); //Ramadan 14 1439
+      " 10 months from now ${HijriCalendar.addMonth(1440, 12).fullDate()}"); //Ramadan 14 1439
 
   //From Gregorian to Ummalqura
-  var hDate = new HijriCalendar.fromDate(new DateTime(2018, 11, 12));
+  var hDate = HijriCalendar.fromDate(DateTime(2018, 11, 12));
 
   print(hDate.fullDate()); //04/03/1440H
   print(hDate.getShortMonthName()); //Rab1
@@ -27,7 +25,7 @@ void main() {
   print(hDate.lengthOfMonth); // 29 days
 
   // check date is valid
-  var _checkDate = new HijriCalendar()
+  var _checkDate = HijriCalendar()
     ..hYear = 1430
     ..hMonth = 09
     ..hDay = 8;
@@ -35,12 +33,12 @@ void main() {
   print(_checkDate.fullDate()); // false -> This month is only 29 days
 
   //From Ummalqura to Gregorian
-  var gDate = new HijriCalendar();
+  var gDate = HijriCalendar();
   print(
       gDate.hijriToGregorian(1440, 4, 19).toString()); //1994-12-29 00:00:00.000
 
   //Format
-  var _format = new HijriCalendar.now();
+  var _format = HijriCalendar.now();
 
   print(_format.fullDate()); //Thulatha, Ramadan 14, 1439 h
   print(_format.toFormat("mm dd yy")); //09 14 39
@@ -53,10 +51,10 @@ void main() {
   print(_today.isAtSameMomentAs(1440, 11, 12)); // false
 
   //Adjustment
-  var defCal = new HijriCalendar.fromDate(new DateTime(2020, 8, 20));
+  var defCal = HijriCalendar.fromDate(DateTime(2020, 8, 20));
   print("default ${defCal.fullDate()}");
-  var adjCal = new HijriCalendar();
-  var adj = new Map<int, int>();
+  var adjCal = HijriCalendar();
+  var adj = Map<int, int>();
   adj[17292] = 59083; // 30 days instead of 29
   adjCal.setAdjustments(adj);
   adjCal.gregorianToHijri(2020, 8, 20);
