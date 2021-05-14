@@ -13,7 +13,7 @@ Hijri Calendar Converter (But I changed to malay naming nomenclature)
 | 7      | Rajab           | Rejab        |
 | 8      | Sha\'aban       | Sha\'aban    |
 | 9      | Ramadan         | Ramadan      |
-| 10     | Shawwal         | Shawal       |
+| 10     | Shawwal         | Syawal       |
 | 11     | Dhu Al-Qi\'dah  | Zulkaedah    |
 | 12     | Dhu Al-Hijjah   | Zulhijjah    |
 

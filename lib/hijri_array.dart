@@ -8,7 +8,7 @@ final Map<int, String> monthNames = {
   7: 'Rejab',
   8: 'Sha\'aban',
   9: 'Ramadan',
-  10: 'Shawal',
+  10: 'Syawal',
   11: 'Zulkaedah',
   12: 'Zulhijjah'
 };
