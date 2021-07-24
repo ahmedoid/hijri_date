@@ -1,4 +1,4 @@
-final Map<int, String> monthNames = {
+const Map<int, String> monthNames = {
   1: 'Muharram',
   2: 'Safar',
   3: 'RabiulAwwal',
@@ -13,7 +13,7 @@ final Map<int, String> monthNames = {
   12: 'Zulhijjah'
 };
 
-final Map<int, String> monthShortNames = {
+const Map<int, String> monthShortNames = {
   1: 'Muh',
   2: 'Saf',
   3: 'Rab1',
@@ -28,7 +28,7 @@ final Map<int, String> monthShortNames = {
   12: 'DhuH'
 };
 
-final Map<int, String> arMonthNames = {
+const Map<int, String> arMonthNames = {
   1: 'محرم',
   2: 'صفر',
   3: 'ربيع الاول',
@@ -43,7 +43,7 @@ final Map<int, String> arMonthNames = {
   12: 'ذو الحجة'
 };
 
-final Map<int, String> arMonthShortNames = {
+const Map<int, String> arMonthShortNames = {
   1: 'محرم',
   2: 'صفر',
   3: 'ربيع١',
@@ -58,7 +58,7 @@ final Map<int, String> arMonthShortNames = {
   12: 'الجة'
 };
 
-final Map<int, String> wdNames = {
+const Map<int, String> wdNames = {
   7: "Sunday",
   1: "Monday",
   2: "Tuesday",
@@ -68,7 +68,7 @@ final Map<int, String> wdNames = {
   6: "Saturday"
 };
 
-final Map<int, String> shortWdNames = {
+const Map<int, String> shortWdNames = {
   7: "Sun",
   1: "Mon",
   2: "Tue",
@@ -78,7 +78,7 @@ final Map<int, String> shortWdNames = {
   6: "Sat"
 };
 
-final Map<int, String> arWkNames = {
+const Map<int, String> arWkNames = {
   7: "الأحد",
   1: "الإثنين",
   2: "الثلاثاء",
@@ -88,7 +88,7 @@ final Map<int, String> arWkNames = {
   6: "السبت"
 };
 
-final Map<int, String> arShortWdNames = {
+const Map<int, String> arShortWdNames = {
   7: "أحد",
   1: "إثنين",
   2: "ثلاثاء",
@@ -98,7 +98,7 @@ final Map<int, String> arShortWdNames = {
   6: "سبت"
 };
 
-final List<int> ummAlquraDateArray = [
+const List<int> ummAlquraDateArray = [
   28607,
   28636,
   28665,

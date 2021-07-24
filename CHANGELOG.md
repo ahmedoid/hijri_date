@@ -1,4 +1,10 @@
 # Changelog
+
+## 3.0.0
+- nullsafety
+- stricter types
+- removed new keyword
+
 ## 2.0.3
 
 - add new method to return month name and day of week name
