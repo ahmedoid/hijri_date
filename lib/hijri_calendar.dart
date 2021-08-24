@@ -30,10 +30,10 @@ class HijriCalendar {
       'short_days': arShortWdNames
     },
     'tr': {
-      'long': arMonthNames,
-      'short': arMonthShortNames,
-      'days': arWkNames,
-      'short_days': arShortWdNames
+      'long': trMonthNames,
+      'short': trMonthShortNames,
+      'days': trWdNames,
+      'short_days': trShortWdNames
     },
   };
 
