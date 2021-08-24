@@ -128,6 +128,26 @@ const Map<int, String> arShortWdNames = {
   6: "سبت"
 };
 
+const Map<int, String> trWdNames = {
+  7: "Pazar",
+  1: "Pazartesi",
+  2: "Salı",
+  3: "Çarşamba",
+  4: "Perşembe",
+  5: "Cuma",
+  6: "Cumartesi"
+};
+
+const Map<int, String> trShortWdNames = {
+  7: "Paz",
+  1: "Pzt",
+  2: "Sal",
+  3: "Çar",
+  4: "Per",
+  5: "Cum",
+  6: "Cmt"
+};
+
 const List<int> ummAlquraDateArray = [
   28607,
   28636,
