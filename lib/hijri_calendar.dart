@@ -207,7 +207,7 @@ class HijriCalendar {
     return this.format(this.hYear, this.hMonth, this.hDay, format);
   }
 
-  String format(year, month, day, format) {
+  String format(year, month, day, String format) {
     String newFormat = format;
 
     String dayString;
@@ -224,49 +224,49 @@ class HijriCalendar {
       yearString = year.toString();
     }
 
-    if (newFormat.contains("dd")) {
+    if (format.contains("dd")) {
       newFormat = newFormat.replaceFirst("dd", dayString);
     } else {
-      if (newFormat.contains("d")) {
+      if (format.contains("d")) {
         newFormat = newFormat.replaceFirst("d", day.toString());
       }
     }
 
     //=========== Day Name =============//
     // Friday
-    if (newFormat.contains("DDDD")) {
+    if (format.contains("DDDD")) {
       newFormat = newFormat.replaceFirst(
           "DDDD", "${_local[language]!['days']![wkDay ?? weekDay()]}");
 
       // Fri
-    } else if (newFormat.contains("DD")) {
+    } else if (format.contains("DD")) {
       newFormat = newFormat.replaceFirst(
           "DD", "${_local[language]!['short_days']![wkDay ?? weekDay()]}");
     }
 
     //============== Month ========================//
     // 1
-    if (newFormat.contains("mm")) {
+    if (format.contains("mm")) {
       newFormat = newFormat.replaceFirst("mm", monthString);
-    } else {
+    } else if (format.contains("m")){
       newFormat = newFormat.replaceFirst("m", monthString);
     }
 
     // Muharram
-    if (newFormat.contains("MMMM")) {
+    if (format.contains("MMMM")) {
       newFormat =
           newFormat.replaceFirst("MMMM", _local[language]!['long']![month]!);
     } else {
-      if (newFormat.contains("MM")) {
+      if (format.contains("MM")) {
         newFormat =
             newFormat.replaceFirst("MM", _local[language]!['short']![month]!);
       }
     }
 
     //================= Year ========================//
-    if (newFormat.contains("yyyy")) {
+    if (format.contains("yyyy")) {
       newFormat = newFormat.replaceFirst("yyyy", yearString);
-    } else {
+    } else if (format.contains("yy")){
       newFormat = newFormat.replaceFirst("yy", yearString.substring(2, 4));
     }
     return newFormat;
