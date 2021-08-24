@@ -1,6 +1,6 @@
 library hijri;
 
-import 'package:hijri/digits_converter.dart';
+import 'digits_converter.dart';
 
 import 'hijri_array.dart';
 
