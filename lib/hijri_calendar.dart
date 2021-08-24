@@ -321,7 +321,7 @@ class HijriCalendar {
 
   String fullDate() {
     String dateFormat = "DDDD, MMMM dd, yyyy";
-    if (language == 'tr') dateFormat = "dd MMMM yyyy, DDDD";
+    if (language == 'tr') dateFormat = "dd MMMM yyyy DDDD";
     return format(hYear, hMonth, hDay, dateFormat);
   }
 
