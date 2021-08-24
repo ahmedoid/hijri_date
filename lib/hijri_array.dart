@@ -58,6 +58,36 @@ const Map<int, String> arMonthShortNames = {
   12: 'الجة'
 };
 
+const Map<int, String> trMonthNames = {
+  1: 'Muharrem',
+  2: 'Safer',
+  3: 'Rebiülevvel',
+  4: 'Rebiülahir',
+  5: 'Cemaziyelevvel',
+  6: 'Cemaziyelahir',
+  7: 'Recep',
+  8: 'Şaban',
+  9: 'Ramazan',
+  10: 'Şevval',
+  11: 'Zilkade',
+  12: 'Zilhicce'
+};
+
+const Map<int, String> trMonthShortNames = {
+  1: 'Muh',
+  2: 'Saf',
+  3: 'Rabe',
+  4: 'Raba',
+  5: 'Ceme',
+  6: 'Cema',
+  7: 'Rec',
+  8: 'Şab',
+  9: 'Ram',
+  10: 'Şev',
+  11: 'Zilk',
+  12: 'Zilh'
+};
+
 const Map<int, String> wdNames = {
   7: "Sunday",
   1: "Monday",
