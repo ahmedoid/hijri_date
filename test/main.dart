@@ -2,8 +2,9 @@
 // source code is governed by a BSD-style license that can be found in the
 // LICENSE file.
 
-import 'package:hijri/hijri_calendar.dart';
 import 'package:test/test.dart';
+
+import '../lib/hijri_calendar.dart';
 
 void main() {
   HijriCalendar _hijriDate = HijriCalendar();
@@ -42,6 +43,64 @@ void main() {
       expect(_hijriDate.toFormat("d"), equals("30"));
       expect(_hijriDate.toFormat("yyyy"), equals("1439"));
       expect(_hijriDate.toFormat("yy"), equals("39"));
+    });
+
+    test('add locale', () {
+      const Map<int, String> monthNames = {
+        1: 'Muharram',
+        2: 'Safar',
+        3: 'Rabiul Awal',
+        4: 'Rabiul Akhir',
+        5: 'Jumadil Awal',
+        6: 'Jumadil Akhir',
+        7: 'Rajab',
+        8: 'Sya\'ban',
+        9: 'Ramadan',
+        10: 'Syawal',
+        11: 'Dzulqa\'dah',
+        12: 'Dzulhijjah'
+      };
+      const Map<int, String> monthShortNames = {
+        1: 'Muh',
+        2: 'Saf',
+        3: 'Rab1',
+        4: 'Rab2',
+        5: 'Jum1',
+        6: 'Jum2',
+        7: 'Raj',
+        8: 'Sya\'',
+        9: 'Ram',
+        10: 'Syaw',
+        11: 'DzuQ',
+        12: 'DzuH'
+      };
+      const Map<int, String> wdNames = {
+        7: "Ahad",
+        1: "Senin",
+        2: "Selasa",
+        3: "Rabu",
+        4: "Kamis",
+        5: "Jum'at",
+        6: "Sabtu"
+      };
+      const Map<int, String> shortWdNames = {
+        7: "Aha",
+        1: "Sen",
+        2: "Sel",
+        3: "Rab",
+        4: "Kam",
+        5: "Jum",
+        6: "Sab"
+      };
+      HijriCalendar.addLocale('id', {
+        'long': monthNames,
+        'short': monthShortNames,
+        'days': wdNames,
+        'short_days': shortWdNames
+      });
+      HijriCalendar.setLocal('id');
+      expect(_hijriDate.toFormat("DDDD MM yyyy dd"),
+          equals("Sabtu Syaw 1439 30"));
     });
   });
 
