@@ -1,6 +1,6 @@
 # Hijri
 
-Hijri Calendar Converter 
+Hijri Calendar Converter
 
 
 
@@ -19,8 +19,18 @@ Hijri Calendar Converter
   print(_today.lengthOfMonth); // 30 days
   print(_today.toFormat("MMMM dd yyyy")); //Ramadan 14 1439
 ```
- ##### Change Local 
+ ##### Change Local
 ```dart
+  HijriCalendar.setLocal(locale);
+```
+ ##### Add New Locale
+```dart
+  HijriCalendar.addLocale(locale, {
+    'long': ...,
+    'short': ...,
+    'days': ...,
+    'short_days': ...
+  });
   HijriCalendar.setLocal(locale);
 ```
   ##### From Gregorian to Ummalqura
@@ -33,7 +43,7 @@ Hijri Calendar Converter
 ```
 ##### Check if date is valid
 ```dart
-  // 
+  //
   var _check_date = HijriCalendar();
   _check_date.hYear = 1439;
   _check_date.hMonth = 11;
@@ -53,12 +63,12 @@ Hijri Calendar Converter
   print(_format.toFormat("mm dd yy")); //09 14 39
 ```
   ##### Compare
-  
+
 ```dart
   //Suppose current hijri data is: Thulatha, Ramadan 14, 1439 h
   print(_today.isAfter(1440, 11, 12)); // false
   print(_today.isBefore(1440, 11, 12)); // true
   print(_today.isAtSameMomentAs(1440, 11, 12)); // false
-  
+
   ```
 
