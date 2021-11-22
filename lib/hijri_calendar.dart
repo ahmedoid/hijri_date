@@ -16,7 +16,7 @@ class HijriCalendar {
   late String dayWeName;
   Map<int, int>? adjustments;
 
-  static const Map<String, Map<String, Map<int, String>>> _local = {
+  static Map<String, Map<String, Map<int, String>>> _local = {
     'en': {
       'long': monthNames,
       'short': monthShortNames,
@@ -51,6 +51,10 @@ class HijriCalendar {
     hYear = month % 12 == 0 ? year - 1 : year;
     hMonth = month % 12 == 0 ? 12 : month % 12;
     hDay = 1;
+  }
+
+  HijriCalendar.addLocale(String locale, Map<String, Map<int, String>> names) {
+    _local[locale] = names;
   }
 
   String _now() {
