@@ -351,4 +351,26 @@ class HijriCalendar {
   String getDayName() {
     return _local[language]!['days']![wkDay]!;
   }
+
+  // to get all month names in long format 
+  Map<int, String> getMonths()
+  {
+    return _local[language]!['long']!;
+  }
+
+  
+ // to get specific month days on map of date and day name 
+ Map<int, String> getMonthDays(int month, int year)
+ {
+   Map<int, String> calender={};
+   int d= hijriToGregorian(year, month, 1).weekday;
+   int daysInMonth=getDaysInMonth(year, month);
+   for(int i =1;i<=daysInMonth;i++)
+   {
+     calender.putIfAbsent(i,()=>_local[language]!['days']![d]!);
+     d=d<7?d+1:1;
+
+   }
+   return calender;
+ }
 }
