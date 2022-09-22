@@ -16,7 +16,7 @@ class HijriCalendar {
   late String dayWeName;
   Map<int, int>? adjustments;
 
-  static const Map<String, Map<String, Map<int, String>>> _local = {
+  static Map<String, Map<String, Map<int, String>>> _local = {
     'en': {
       'long': monthNames,
       'short': monthShortNames,
@@ -57,6 +57,10 @@ class HijriCalendar {
     hYear = month % 12 == 0 ? year - 1 : year;
     hMonth = month % 12 == 0 ? 12 : month % 12;
     hDay = 1;
+  }
+
+  HijriCalendar.addLocale(String locale, Map<String, Map<int, String>> names) {
+    _local[locale] = names;
   }
 
   String _now() {
@@ -248,7 +252,7 @@ class HijriCalendar {
     // 1
     if (format.contains("mm")) {
       newFormat = newFormat.replaceFirst("mm", monthString);
-    } else if (format.contains("m")){
+    } else if (format.contains("m")) {
       newFormat = newFormat.replaceFirst("m", monthString);
     }
 
@@ -266,7 +270,7 @@ class HijriCalendar {
     //================= Year ========================//
     if (format.contains("yyyy")) {
       newFormat = newFormat.replaceFirst("yyyy", yearString);
-    } else if (format.contains("yy")){
+    } else if (format.contains("yy")) {
       newFormat = newFormat.replaceFirst("yy", yearString.substring(2, 4));
     }
     return newFormat;
@@ -354,5 +358,22 @@ class HijriCalendar {
 
   String getDayName() {
     return _local[language]!['days']![wkDay]!;
+  }
+
+  // to get all month names in long format
+  Map<int, String> getMonths() {
+    return _local[language]!['long']!;
+  }
+
+  // to get specific month days on map of date and day name
+  Map<int, String> getMonthDays(int month, int year) {
+    Map<int, String> calender = {};
+    int d = hijriToGregorian(year, month, 1).weekday;
+    int daysInMonth = getDaysInMonth(year, month);
+    for (int i = 1; i <= daysInMonth; i++) {
+      calender.putIfAbsent(i, () => _local[language]!['days']![d]!);
+      d = d < 7 ? d + 1 : 1;
+    }
+    return calender;
   }
 }

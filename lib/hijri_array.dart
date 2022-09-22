@@ -76,10 +76,10 @@ const Map<int, String> trMonthNames = {
 const Map<int, String> trMonthShortNames = {
   1: 'Muh',
   2: 'Saf',
-  3: 'Rabe',
-  4: 'Raba',
-  5: 'Ceme',
-  6: 'Cema',
+  3: 'Rab1',
+  4: 'Rab2',
+  5: 'Cem1',
+  6: 'Cem2',
   7: 'Rec',
   8: 'Şab',
   9: 'Ram',
@@ -116,6 +116,16 @@ const Map<int, String> arWkNames = {
   4: "الخميس",
   5: "الجمعة",
   6: "السبت"
+};
+
+const Map<int, String> trWkNames = {
+  7: "Pazar",
+  1: "Pazartesi",
+  2: "Salı",
+  3: "Çarşamba",
+  4: "Perşembe",
+  5: "Cuma",
+  6: "Cumartesi"
 };
 
 const Map<int, String> arShortWdNames = {
