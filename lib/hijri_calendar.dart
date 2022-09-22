@@ -315,8 +315,7 @@ class HijriCalendar {
 
   @override
   String toString() {
-    String dateFormat = "dd/mm/yyyy";
-    if (language == "ar") dateFormat = "yyyy/mm/dd";
+    String dateFormat = (language == "ar") ? "yyyy/mm/dd" : "dd/mm/yyyy";
 
     return format(hYear, hMonth, hDay, dateFormat);
   }
@@ -324,8 +323,9 @@ class HijriCalendar {
   List<int?> toList() => [hYear, hMonth, hDay];
 
   String fullDate() {
-    String dateFormat = "DDDD, MMMM dd, yyyy";
-    if (language == 'tr') dateFormat = "dd MMMM yyyy DDDD";
+    String dateFormat =
+        (language == 'tr') ? "dd MMMM yyyy DDDD" : "DDDD, MMMM dd, yyyy";
+
     return format(hYear, hMonth, hDay, dateFormat);
   }
 
