@@ -27,7 +27,27 @@ void main() {
     });
 
     test('days in year', () {
-      expect(_hijriDate.lengthOfYear(year: 1440), equals(355));
+      // Correct length of year 1440 AH per Umm al-Qura:
+      // 1 Muharram 1440 = 2018-09-11; 1 Muharram 1441 = 2019-08-31 (354 days).
+      expect(_hijriDate.lengthOfYear(year: 1440), equals(354));
+    });
+
+    test('lengthOfYear matches Gregorian-day difference across full range', () {
+      final c = HijriCalendar();
+      for (var y = 1356; y <= 1499; y++) {
+        final fixed = c.lengthOfYear(year: y);
+        final greg = c
+            .hijriToGregorian(y + 1, 1, 1)
+            .difference(c.hijriToGregorian(y, 1, 1))
+            .inDays;
+        expect(fixed, equals(greg),
+            reason: 'year $y: lengthOfYear=$fixed but Gregorian diff=$greg');
+      }
+    });
+
+    test('lengthOfYear handles boundary year 1356', () {
+      // Previously threw ArgumentError due to m=0 reading array[-1].
+      expect(HijriCalendar().lengthOfYear(year: 1356), equals(353));
     });
 
     test('days in month', () {
@@ -92,15 +112,18 @@ void main() {
         5: "Jum",
         6: "Sab"
       };
-      HijriCalendar.addLocale('id', {
-        'long': monthNames,
-        'short': monthShortNames,
-        'days': wdNames,
-        'short_days': shortWdNames
-      });
-      HijriCalendar.setLocal('id');
+      HijriCalendar.addLocale('id', HijriLocale(
+        longMonths: monthNames,
+        shortMonths: monthShortNames,
+        days: wdNames,
+        shortDays: shortWdNames,
+      ));
+      // Per-instance locale (4.0.0): assign on the instance directly, no
+      // global setLocal mutation required.
+      _hijriDate.locale = 'id';
       expect(_hijriDate.toFormat("DDDD MM yyyy dd"),
           equals("Sabtu Syaw 1439 30"));
+      _hijriDate.locale = 'en'; // restore for later tests
     });
   });
 
@@ -146,11 +169,11 @@ void main() {
        1: 'Muharram',
        2: 'Safar',
        3: 'Rabi\' Al-Awwal',
-       4: 'Rabi\' Al-Thani',
+       4: 'Rabi\' Al-Akhir',
        5: 'Jumada Al-Awwal',
-       6: 'Jumada Al-Thani',
+       6: 'Jumada Al-Akhirah',
        7: 'Rajab',
-       8: 'Sha\'aban',
+       8: 'Sha\'ban',
        9: 'Ramadan',
        10: 'Shawwal',
        11: 'Dhu Al-Qi\'dah',
@@ -168,6 +191,98 @@ void main() {
 
   });
 
+  // Regression: format() previously did sequential replaceFirst calls, so
+  // day names containing lowercase Latin m/d/y were corrupted. e.g.
+  // Indonesian "Jum'at" was rendered as "Ju12'at" when month was 12.
+  group('format() tokenizer (4.0.0)', () {
+    HijriCalendar.setLocal('en');
+    test('does not corrupt day names with lowercase m', () {
+      HijriCalendar.addLocale(
+          'id_test',
+          const HijriLocale(
+            longMonths: {
+              1: 'Mh', 2: 'Sf', 3: 'R1', 4: 'R2', 5: 'J1', 6: 'J2',
+              7: 'Rj', 8: 'Sb', 9: 'Rm', 10: 'Sw', 11: 'Dq', 12: 'Dh',
+            },
+            shortMonths: {
+              1: 'M', 2: 'S', 3: 'R1', 4: 'R2', 5: 'J1', 6: 'J2',
+              7: 'Rj', 8: 'Sb', 9: 'Rm', 10: 'Sw', 11: 'Dq', 12: 'Dh',
+            },
+            days: {
+              7: 'Ahad', 1: 'Senin', 2: 'Selasa', 3: 'Rabu',
+              4: 'Kamis', 5: "Jum'at", 6: 'Sabtu',
+            },
+            shortDays: {
+              7: 'Aha', 1: 'Sen', 2: 'Sel', 3: 'Rab',
+              4: 'Kam', 5: 'Jum', 6: 'Sab',
+            },
+          ));
+      HijriCalendar.setLocal('id_test');
+      final h = HijriCalendar.fromDate(DateTime(2026, 5, 22)); // Friday
+      // Should produce: Jum'at, Dh 5, 1447 (NOT Ju12'at, Dh 5, 1447)
+      expect(h.toFormat('DDDD, MMMM dd, yyyy'),
+          equals("Jum'at, Dh 5, 1447"));
+      HijriCalendar.setLocal('en');
+    });
+
+    test('does not substitute m/yy when format has no m/yy token', () {
+      HijriCalendar.setLocal('en');
+      final h = HijriCalendar.fromDate(DateTime(2026, 5, 22));
+      // No m, d, y tokens — should return literal day name unchanged.
+      expect(h.toFormat('DDDD'), equals('Friday'));
+    });
+  });
+
+  group('addMonths / addDays (4.0.0)', () {
+    final base = HijriCalendar()..gregorianToHijri(2026, 5, 22); // 5/12/1447
+    test('addMonths positive', () {
+      expect(base.addMonths(1).toList(), equals([1448, 1, 5]));
+      expect(base.addMonths(13).toList(), equals([1449, 1, 5]));
+    });
+    test('addMonths zero is identity', () {
+      expect(base.addMonths(0).toList(), equals([1447, 12, 5]));
+    });
+    test('addMonths negative crosses year boundary', () {
+      expect(base.addMonths(-1).toList(), equals([1447, 11, 5]));
+      expect(base.addMonths(-12).toList(), equals([1446, 12, 5]));
+      expect(base.addMonths(-13).toList(), equals([1446, 11, 5]));
+    });
+    test('addDays positive and negative', () {
+      expect(base.addDays(1).toList(), equals([1447, 12, 6]));
+      expect(base.addDays(-1).toList(), equals([1447, 12, 4]));
+    });
+    test('addDays crosses month', () {
+      // Dhu al-Hijja 1447 has 29 days; from day 5, +24 days lands on day 29,
+      // +25 days lands on 1 Muharram 1448.
+      expect(base.addDays(25).toList(), equals([1448, 1, 1]));
+    });
+  });
+
+  // Regression for issue #26: 1446 Jumada-II should be 30 days and 1485
+  // Shawwal should be 30 days, matching authoritative Umm al-Qura data and
+  // moment-hijri upstream.
+  group('data array corrections (issue #26)', () {
+    final c = HijriCalendar();
+    test('1446 Jumada-I = 29 days', () {
+      expect(c.getDaysInMonth(1446, 5), equals(29));
+    });
+    test('1446 Jumada-II = 30 days', () {
+      expect(c.getDaysInMonth(1446, 6), equals(30));
+    });
+    test('2024-12-02 -> 1 Jumada-II 1446', () {
+      final h = HijriCalendar.fromDate(DateTime(2024, 12, 2));
+      expect(h.toList(), equals([1446, 6, 1]));
+    });
+    test('2024-12-31 -> 30 Jumada-II 1446', () {
+      final h = HijriCalendar.fromDate(DateTime(2024, 12, 31));
+      expect(h.toList(), equals([1446, 6, 30]));
+    });
+    test('1485 Ramadan = 29, Shawwal = 30', () {
+      expect(c.getDaysInMonth(1485, 9), equals(29));
+      expect(c.getDaysInMonth(1485, 10), equals(30));
+    });
+  });
+
   // Regression for issue #25: setLocal with an unregistered locale used to
   // silently corrupt the static `language` and crash later in _local[language]!
   // with a confusing "Null check operator used on a null value" error.
@@ -176,21 +291,13 @@ void main() {
       expect(() => HijriCalendar.setLocal('fr'), throwsArgumentError);
     });
 
-    test('does not mutate language when validation fails', () {
+    test('does not mutate defaultLocale when validation fails', () {
       HijriCalendar.setLocal('en');
       try {
         HijriCalendar.setLocal('xx');
       } catch (_) {}
+      expect(HijriCalendar.defaultLocale, equals('en'));
       expect(HijriCalendar.now().dayWeName, isNotEmpty);
-    });
-
-    test('addLocale rejects maps missing required keys', () {
-      expect(
-        () => HijriCalendar.addLocale('broken', {
-          'long': const {1: 'X'},
-        }),
-        throwsArgumentError,
-      );
     });
 
     test('supportedLocales reflects built-ins', () {
