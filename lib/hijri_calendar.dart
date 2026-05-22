@@ -37,8 +37,27 @@ class HijriCalendar {
     },
   };
 
+  static const List<String> _requiredLocaleKeys = [
+    'long',
+    'short',
+    'days',
+    'short_days'
+  ];
+
+  /// Returns the list of currently registered locale codes (built-in plus
+  /// any added via [HijriCalendar.addLocale]).
+  static List<String> get supportedLocales => _local.keys.toList();
+
   // Consider switching to the factory pattern
   factory HijriCalendar.setLocal(String locale) {
+    if (!_local.containsKey(locale)) {
+      throw ArgumentError.value(
+          locale,
+          'locale',
+          "Locale is not registered. Supported locales: "
+              "${_local.keys.join(', ')}. "
+              "Register a new one first with HijriCalendar.addLocale().");
+    }
     language = locale;
     return HijriCalendar();
   }
@@ -60,6 +79,15 @@ class HijriCalendar {
   }
 
   HijriCalendar.addLocale(String locale, Map<String, Map<int, String>> names) {
+    for (final key in _requiredLocaleKeys) {
+      if (!names.containsKey(key)) {
+        throw ArgumentError.value(
+            names,
+            'names',
+            "Locale '$locale' is missing required key '$key'. "
+                "Expected keys: ${_requiredLocaleKeys.join(', ')}.");
+      }
+    }
     _local[locale] = names;
   }
 

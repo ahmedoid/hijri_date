@@ -5,3 +5,5 @@ pubspec.lock
 pubspec.lock
 res
 /build/
+.claude/
+CLAUDE.md

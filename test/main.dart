@@ -141,6 +141,7 @@ void main() {
      group('return Map of months values', () {
     HijriCalendar _calender = HijriCalendar();
     test('get all months', () {
+      HijriCalendar.setLocal('en');
        const Map<int, String> monthNames = {
        1: 'Muharram',
        2: 'Safar',
@@ -161,9 +162,39 @@ void main() {
 
        test('get specific month calender', () {
          HijriCalendar _calender = HijriCalendar();
-         Map monthes=_calender.getMonthDays(HijriCalendar.now().hMonth,HijriCalendar.now().hYear);     
+         Map monthes=_calender.getMonthDays(HijriCalendar.now().hMonth,HijriCalendar.now().hYear);
       expect(monthes, equals(monthes));
     });
-  
+
+  });
+
+  // Regression for issue #25: setLocal with an unregistered locale used to
+  // silently corrupt the static `language` and crash later in _local[language]!
+  // with a confusing "Null check operator used on a null value" error.
+  group('setLocal validation (issue #25)', () {
+    test('throws ArgumentError for unregistered locale', () {
+      expect(() => HijriCalendar.setLocal('fr'), throwsArgumentError);
+    });
+
+    test('does not mutate language when validation fails', () {
+      HijriCalendar.setLocal('en');
+      try {
+        HijriCalendar.setLocal('xx');
+      } catch (_) {}
+      expect(HijriCalendar.now().dayWeName, isNotEmpty);
+    });
+
+    test('addLocale rejects maps missing required keys', () {
+      expect(
+        () => HijriCalendar.addLocale('broken', {
+          'long': const {1: 'X'},
+        }),
+        throwsArgumentError,
+      );
+    });
+
+    test('supportedLocales reflects built-ins', () {
+      expect(HijriCalendar.supportedLocales, containsAll(['en', 'ar', 'tr']));
+    });
   });
 }
